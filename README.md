@@ -1,5 +1,5 @@
 <!--suppress CheckImageSize, HtmlDeprecatedAttribute -->
-<img align="right" width="80" height="80" src=".github/yawning-abyss.png" alt="The Yawning Abyss">
+<img align="right" width="100" height="100" src=".github/yawning-abyss.png" alt="The Yawning Abyss">
 
 # Yoodle
 
@@ -9,3 +9,9 @@
 
 * All of them.
 * (Currently none)
+
+## Banner
+
+Just a little something I made, you know, for fun.
+
+![Hellscape](.github/banner.png)
