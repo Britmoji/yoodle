@@ -1,5 +1,5 @@
 <!--suppress CheckImageSize, HtmlDeprecatedAttribute -->
-<img align="right" width="100" height="100" src=".github/yawning-abyss.png" alt="The Yawning Abyss">
+<img align="right" width="120" height="120" src=".github/yawning-abyss.png" alt="The Yawning Abyss">
 
 # Yoodle
 
