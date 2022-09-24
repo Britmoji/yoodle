@@ -3,10 +3,12 @@ package org.britmoji.yoodle
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import mu.KotlinLogging
 import org.britmoji.yoodle.config.config
+import org.britmoji.yoodle.extensions.GitHubExtension
+import org.britmoji.yoodle.extensions.InteractionExtension
 import org.britmoji.yoodle.util.Colors
 import org.britmoji.yoodle.util.feedback
 
-private val logger = KotlinLogging.logger {  }
+private val logger = KotlinLogging.logger { }
 
 suspend fun main() {
     // Warn for missing config
@@ -29,6 +31,11 @@ suspend fun main() {
 
         presence {
             watching("you sleep")
+        }
+
+        extensions {
+            add(::GitHubExtension)
+            add(::InteractionExtension)
         }
     }
 
