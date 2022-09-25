@@ -13,13 +13,24 @@ import java.io.File
  */
 @Serializable
 data class BotConfig(
-    val bot: Bot = Bot()
+    val bot: Bot = Bot(),
+    val modules: Modules = Modules()
 ) {
     @Serializable
     data class Bot(
         val token: String = "INSERT_TOKEN_HERE",
         val guildId: String = "INSERT_GUILD_ID_HERE",
     )
+
+    @Serializable
+    data class Modules(
+        val linkReplacer: LinkReplacer = LinkReplacer(),
+    ) {
+        @Serializable
+        data class LinkReplacer(
+            val sites: Map<String, String> = emptyMap()
+        )
+    }
 }
 
 /**
