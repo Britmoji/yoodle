@@ -3,8 +3,6 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    application
-
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
 
@@ -43,11 +41,6 @@ dependencies {
 }
 
 // Java build
-application {
-    // This is deprecated, but the Shadow plugin requires it
-    mainClass.set(main)
-}
-
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "17"
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
