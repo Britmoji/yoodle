@@ -14,7 +14,7 @@ import org.britmoji.yoodle.util.sendWebhook
 
 class LinkReplacerExtension(override val name: String = "Link Replacer") : Extension() {
     private val urlRegex = Regex(
-        "(?<protocol>https?://)?(?<domain>[a-z0-9.-]+)(?<path>/[a-z0-9/._-]*)?(?<query>\\?[a-z0-9=&_]+)?",
+        "(?<protocol>https?://)?(?<domain>[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6})(?<path>[-a-zA-Z0-9()@:%_+.~&/=]*)",
         RegexOption.IGNORE_CASE
     )
 
