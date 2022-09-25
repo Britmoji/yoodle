@@ -57,6 +57,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+tasks["build"].dependsOn(tasks.shadowJar)
+
 // IDEA
 idea {
     project {
