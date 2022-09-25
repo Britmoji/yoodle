@@ -11,6 +11,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.WebhookMessageCreateBuilder
 import dev.kord.rest.builder.message.create.embed
+import org.britmoji.yoodle.bot
 import org.britmoji.yoodle.config.BotConfig
 
 /**
@@ -63,8 +64,10 @@ suspend fun TopGuildMessageChannel.sendWebhook(
     avatarUrl: String? = null,
     builder: suspend WebhookMessageCreateBuilder.() -> Unit = {}
 ): Message {
-    val hook = ensureWebhook(this, "Yoodle - Webhook") { logoBytes }
-    return hook.execute(hook.token ?: "") {
+    val botUsername = bot.kordRef.getSelf().username
+    val hook = ensureWebhook(this, "$botUsername - Webhook") { logoBytes }
+
+    return hook.execute(hook.token ?: error("No webhook token found")) {
         this.username = name
         this.avatarUrl = avatarUrl
         this.builder()

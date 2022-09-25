@@ -11,6 +11,8 @@ import org.britmoji.yoodle.util.feedback
 
 private val logger = KotlinLogging.logger { }
 
+lateinit var bot: ExtensibleBot
+
 suspend fun main() {
     // Warn for missing config
     if (config.bot.token == "INSERT_TOKEN_HERE") {
@@ -18,7 +20,7 @@ suspend fun main() {
     }
 
     // Create the bot
-    val bot = ExtensibleBot(config.bot.token) {
+    bot = ExtensibleBot(config.bot.token) {
         applicationCommands {
             enabled = true
             defaultGuild(config.bot.guildId)
