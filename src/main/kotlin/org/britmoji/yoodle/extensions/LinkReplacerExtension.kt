@@ -30,8 +30,10 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 // Check it's a guild channel
                 val channel = event.message.channel.asChannelOfOrNull<TopGuildMessageChannel>() ?: return@action
 
+                val messageContent = event.message.content
+
                 // Get matches
-                val matches = urlRegex.findAll(event.message.content)
+                val matches = urlRegex.findAll(messageContent)
 
                 // Add matches
                 val links = arrayListOf<String>()
@@ -41,6 +43,11 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                     var domain = match.groups["domain"]?.value ?: continue
                     val path = match.groups["path"]?.value ?: ""
 
+                    // Check if in spoiler
+                    val spoiler = messageContent.split(domain, ignoreCase = true, limit = 2).map {
+                        it.split("||").size
+                    }.all { it % 2 != 1 }
+
                     // Replace domains
                     config.modules.linkReplacer.sites.entries
                         .find { (k, _) -> k.equals(domain, true) }
@@ -48,7 +55,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                         ?: continue
 
                     // Build link (ignoring query)
-                    links.add("$protocol$domain$path")
+                    links.add(if (spoiler) "|| $protocol$domain$path ||" else "$protocol$domain$path")
                 }
 
                 // Check if we have any links
@@ -60,8 +67,19 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 }
 
                 // Remove embeds from original message
-                event.message.edit {
-                    flags = MessageFlags(MessageFlag.SuppressEmbeds)
+                event.run {
+                    // Keep message if sender is idiot jackson or contains text that isn't the link
+                    if (
+                        member?.id?.value == 117850765908770825uL
+                        || messageContent.contains(' ')
+                        || messageContent.contains('\n')
+                    ) {
+                        message.edit {
+                            flags = MessageFlags(MessageFlag.SuppressEmbeds)
+                        }
+                    } else {
+                        message.delete()
+                    }
                 }
             }
         }
