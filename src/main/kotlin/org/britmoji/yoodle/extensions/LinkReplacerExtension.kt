@@ -55,7 +55,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 if (links.isEmpty()) return@action
 
                 // Create
-                channel.sendWebhook(event.member?.tag, event.member?.run { memberAvatar?.url ?: avatar?.url }) {
+                channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
                     content = links.joinToString("\n")
                 }
 
