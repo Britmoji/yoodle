@@ -3,15 +3,20 @@ package org.britmoji.yoodle.extensions
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.utils.isNullOrBot
+import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.MessageFlag
 import dev.kord.common.entity.MessageFlags
 import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.core.live.live
+import dev.kord.core.live.onUpdate
+import kotlinx.coroutines.cancel
 import org.britmoji.yoodle.config.config
 import org.britmoji.yoodle.util.sendWebhook
 
+@OptIn(KordPreview::class)
 class LinkReplacerExtension(override val name: String = "Link Replacer") : Extension() {
     private val urlRegex = Regex(
         "(?<protocol>https?://)?(?<domain>[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6})(?<path>[-a-zA-Z0-9()@:%_+.~&/=]*)",
@@ -61,25 +66,30 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 // Check if we have any links
                 if (links.isEmpty()) return@action
 
+                if (event.message.embeds.isNotEmpty()) {
+                    // Remove embeds from original message
+                    event.message.edit {
+                        flags = MessageFlags(MessageFlag.SuppressEmbeds)
+                    }
+                } else {
+                    // Wait for the message to be edited by discord, so we can
+                    // remove the embeds from the original message
+                    val live = event.message.live()
+
+                    live.onUpdate {
+                        // Remove embeds from original message
+                        event.message.edit {
+                            flags = MessageFlags(MessageFlag.SuppressEmbeds)
+                        }
+
+                        // Stop listening
+                        live.cancel()
+                    }
+                }
+
                 // Create
                 channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
                     content = links.joinToString("\n")
-                }
-
-                // Remove embeds from original message
-                event.run {
-                    // Keep message if sender is idiot jackson or contains text that isn't the link
-                    if (
-                        member?.id?.value == 117850765908770825uL
-                        || messageContent.contains(' ')
-                        || messageContent.contains('\n')
-                    ) {
-                        message.edit {
-                            flags = MessageFlags(MessageFlag.SuppressEmbeds)
-                        }
-                    } else {
-                        message.delete()
-                    }
                 }
             }
         }
