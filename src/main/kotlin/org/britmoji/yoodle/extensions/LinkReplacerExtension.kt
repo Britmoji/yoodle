@@ -30,7 +30,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
             }
 
             action {
-                if (event.member.isNullOrBot()) return@action
+                if (event.member.isNullOrBot() || event.message.webhookId != null) return@action
 
                 // Check it's a guild channel
                 val channel = event.message.channel.asChannelOfOrNull<TopGuildMessageChannel>() ?: return@action
@@ -77,6 +77,8 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                     val live = event.message.live()
 
                     live.onUpdate {
+                        if (event.member.isNullOrBot() || event.message.webhookId != null) return@onUpdate
+
                         // Remove embeds from original message
                         event.message.edit {
                             flags = MessageFlags(MessageFlag.SuppressEmbeds)
