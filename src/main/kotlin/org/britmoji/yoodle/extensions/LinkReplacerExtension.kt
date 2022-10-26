@@ -37,6 +37,8 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
 
                 val messageContent = event.message.content
 
+                val suppressed = event.message.flags?.contains(MessageFlag.SuppressEmbeds)
+
                 // Get matches
                 val matches = urlRegex.findAll(messageContent)
 
@@ -90,8 +92,14 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 }
 
                 // Create
-                channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
+                val hookMsg = channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
                     content = links.joinToString("\n")
+                }
+
+                if(suppressed == true) {
+                    hookMsg.edit {
+                        flags = MessageFlags(MessageFlag.SuppressEmbeds)
+                    }
                 }
             }
         }
