@@ -37,8 +37,6 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
 
                 val messageContent = event.message.content
 
-                val suppressed = event.message.flags?.contains(MessageFlag.SuppressEmbeds)
-
                 // Get matches
                 val matches = urlRegex.findAll(messageContent)
 
@@ -55,6 +53,11 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                         it.split("||").size
                     }.all { it % 2 != 1 }
 
+                    // Check if manually suppressed
+                    val suppressed = messageContent.split(domain, ignoreCase = true, limit = 2).map {
+                        it.split("<>").size
+                    }.all { it % 2 != 1 }
+
                     // Replace domains
                     config.modules.linkReplacer.sites.entries
                         .find { (k, _) -> k.equals(domain, true) }
@@ -62,7 +65,13 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                         ?: continue
 
                     // Build link (ignoring query)
-                    links.add(if (spoiler) "|| $protocol$domain$path ||" else "$protocol$domain$path")
+                    links.add(
+                        when {
+                            spoiler -> "|| $protocol$domain$path ||"
+                            suppressed -> "<$protocol$domain$path>"
+                            else -> "$protocol$domain$path"
+                        }
+                    )
                 }
 
                 // Check if we have any links
@@ -92,14 +101,8 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 }
 
                 // Create
-                val hookMsg = channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
+                channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
                     content = links.joinToString("\n")
-                }
-
-                if(suppressed == true) {
-                    hookMsg.edit {
-                        flags = MessageFlags(MessageFlag.SuppressEmbeds)
-                    }
                 }
             }
         }
