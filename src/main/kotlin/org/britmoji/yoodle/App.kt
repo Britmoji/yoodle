@@ -3,9 +3,10 @@ package org.britmoji.yoodle
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import mu.KotlinLogging
 import org.britmoji.yoodle.config.config
+import org.britmoji.yoodle.extensions.EventsExtension
 import org.britmoji.yoodle.extensions.GitHubExtension
-import org.britmoji.yoodle.extensions.InteractionExtension
 import org.britmoji.yoodle.extensions.LinkReplacerExtension
+import org.britmoji.yoodle.extensions.TranscodeExtension
 import org.britmoji.yoodle.util.Colors
 import org.britmoji.yoodle.util.feedback
 
@@ -38,8 +39,9 @@ suspend fun main() {
 
         extensions {
             add(::GitHubExtension)
-            add(::InteractionExtension)
+            add(::EventsExtension)
             add(::LinkReplacerExtension)
+            add(::TranscodeExtension)
         }
     }
 

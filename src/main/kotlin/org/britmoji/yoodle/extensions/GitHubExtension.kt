@@ -6,39 +6,27 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.create.actionRow
+import org.britmoji.yoodle.util.MessageTrigger
+import org.britmoji.yoodle.util.removeEmbeds
 import java.net.URL
 import kotlin.math.max
 
 class GitHubExtension(override val name: String = "GitHub") : Extension() {
-    /**
-     * https://github.com/traefik/traefik/blob/707d355d4ae4b0e3681d5b968928974251f4d9fb/pkg/plugins/plugins.go#L17-L26
-     * https://github.com/traefik/traefik/blob/master/pkg/plugins/plugins.go#L17
-     */
-    private val gitHubLineRegex =
-        Regex("https://github.com/(?<owner>[^/]+)/(?<repo>[^/]+)/(blob|tree)/(?<branch>[^/]+)/(?<path>.+)#L(?<startLine>\\d+)(-L(?<endLine>\\d+))?")
 
     // pkg/plugins/plugins.go
     private val languageRegex = Regex("(?<path>.+)\\.(?<extension>\\w+)(\\?.+)?$")
 
+    private val trigger = MessageTrigger.gitHub { it.startLine != null }
+
     override suspend fun setup() {
         event<MessageCreateEvent> {
-            check {
-                // Ignore non-github links
-                failIfNot { gitHubLineRegex.containsMatchIn(event.message.content) }
-            }
-
             action {
-                // Match the regex
-                val match = gitHubLineRegex.findAll(event.message.content)
+                // Find matches
+                trigger.run(event.message) {
+                    if (it.suppressed || it.spoiler) return@run
 
-                match.forEach {
-                    // Get data
-                    val owner = it.groups["owner"]?.value ?: return@forEach
-                    val repo = it.groups["repo"]?.value ?: return@forEach
-                    val branch = it.groups["branch"]?.value ?: return@forEach
-                    val path = it.groups["path"]?.value ?: return@forEach
-                    var startLine = it.groups["startLine"]?.value?.toIntOrNull() ?: return@forEach
-                    var endLine = it.groups["endLine"]?.value?.toIntOrNull()
+                    var startLine = it.match.startLine!!
+                    var endLine = it.match.endLine
 
                     // If only one line is specified, have a default of 6 lines
                     if (endLine == null) {
@@ -54,22 +42,20 @@ class GitHubExtension(override val name: String = "GitHub") : Extension() {
                     }
 
                     // Read lines
-                    val url = "https://raw.githubusercontent.com/$owner/$repo/$branch/$path"
+                    val url =
+                        "https://raw.githubusercontent.com/${it.match.owner}/${it.match.repo}/${it.match.branch}/${it.match.path}"
                     val lines = URL(url).readText().split("\n")
 
                     // Infer language
-                    val language = languageRegex.find(path)?.groups?.get("extension")?.value ?: "text"
-                    if (!language.matches(Regex("[a-zA-Z0-9]+"))) {
-                        return@forEach
-                    }
+                    val language = languageRegex.find(it.match.path)?.groups?.get("extension")?.value ?: "text"
+                    if (!language.matches(Regex("[a-zA-Z0-9]+"))) return@run
 
                     // Create message
                     val message = lines.subList(startLine - 1, endLine).joinToString("\n")
                     val msgContent = "```${language}\n$message\n```"
-                    if (msgContent.length > 2000) {
-                        return@forEach
-                    }
+                    if (msgContent.length > 2000) return@run
 
+                    event.message.removeEmbeds()
                     event.message.channel.createMessage {
                         content = msgContent
 
