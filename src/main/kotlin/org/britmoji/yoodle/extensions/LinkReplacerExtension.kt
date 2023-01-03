@@ -32,6 +32,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                         .values.firstOrNull() ?: return@run
 
                     // Build new URL
+                    if (it.suppressed) return@run
                     links.add(it.style("${it.match.protocol}://$domain${it.match.path}"))
                 }
 
