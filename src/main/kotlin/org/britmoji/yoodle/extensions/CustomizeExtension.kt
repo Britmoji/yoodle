@@ -85,7 +85,7 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
 
                     // Add role
                     this.member?.addRole(role.id)
-                    respond { content = "Changed icon to ${role.icon}" }
+                    respond { content = "Changed icon!" }
                 }
             }
 
