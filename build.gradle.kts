@@ -1,12 +1,13 @@
 import org.jetbrains.gradle.ext.runConfigurations
 import org.jetbrains.gradle.ext.settings
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("jvm") version "2.0.20-Beta1"
+    kotlin("plugin.serialization") version "2.0.20-Beta1"
 
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.github.goooler.shadow") version "8.1.8"
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.6"
 }
 
@@ -18,8 +19,15 @@ val main = "org.britmoji.yoodle.AppKt"
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-    maven("https://maven.kotlindiscord.com/repository/maven-public/")
+
+    maven {
+        name = "Sonatype Snapshots (Legacy)"
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    maven {
+        name = "Sonatype Snapshots"
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    }
 }
 
 dependencies {
@@ -31,7 +39,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
     // Kord
-    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.6-SNAPSHOT")
+    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.9.0-SNAPSHOT")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.4")
@@ -46,8 +54,10 @@ dependencies {
 
 // Java build
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xopt-in=kotlin.RequiresOptIn")
+    }
 }
 
 tasks.jar {

@@ -44,7 +44,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
                 channel.sendWebhook(
                     // hacky username fix
                     event.member?.tag?.let { if (it.endsWith("#0")) it.dropLast(2) else it },
-                    event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }
+                    event.member?.let { it.memberAvatar?.cdnUrl?.toUrl() ?: it.avatar?.cdnUrl?.toUrl() }
                 ) {
                     content = links.joinToString("\n")
                 }

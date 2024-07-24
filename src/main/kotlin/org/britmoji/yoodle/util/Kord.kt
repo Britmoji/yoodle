@@ -19,7 +19,7 @@ import dev.kord.core.live.onUpdate
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.WebhookMessageCreateBuilder
-import dev.kord.rest.builder.message.create.embed
+import dev.kord.rest.builder.message.embed
 import io.ktor.client.request.forms.ChannelProvider
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.CoroutineName

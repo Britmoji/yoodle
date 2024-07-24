@@ -5,7 +5,7 @@ import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.event.message.MessageCreateEvent
-import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.rest.builder.message.actionRow
 import org.britmoji.yoodle.util.MessageTrigger
 import org.britmoji.yoodle.util.removeEmbeds
 import java.net.URL
