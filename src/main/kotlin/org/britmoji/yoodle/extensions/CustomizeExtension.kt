@@ -6,8 +6,11 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.color
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalAttachment
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalEmoji
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import com.kotlindiscord.kord.extensions.utils.canInteract
 import com.kotlindiscord.kord.extensions.utils.download
+import com.kotlindiscord.kord.extensions.utils.getTopRole
+import com.kotlindiscord.kord.extensions.utils.selfMember
 import dev.kord.common.Color
 import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
@@ -23,7 +26,7 @@ import kotlinx.coroutines.flow.toList
 
 class CustomizeExtension(override val name: String = "Customize") : Extension() {
     override suspend fun setup() {
-        ephemeralSlashCommand {
+        publicSlashCommand {
             name = "customize"
             description = "Change your color or icon"
 
@@ -104,11 +107,14 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
         val existing = member.guild.roles.firstOrNull { it.name == name }
         if (existing != null) return existing
 
-        val highestRole = member.guild.roles.toList().maxByOrNull { it.rawPosition }
+        val highestRole = member.guild.roles.toList()
+            .filter { member.guild.selfMember().getTopRole()?.canInteract(it) == true }
+            .maxByOrNull { it.rawPosition }
+
         return member.guild.createRole {
             this.name = name
             this.color = color
-        }.also { it.changePosition((highestRole?.rawPosition ?: 0) - 1).collect() }
+        }.also { it.changePosition(highestRole?.rawPosition ?: 0).collect() }
     }
 
     private inner class RoleArguments : Arguments() {
