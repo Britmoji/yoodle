@@ -8,7 +8,7 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/yoodle-*-all.jar bot.jar
 
-RUN adduser -D -g '' bot && \
+RUN adduser --disabled-password --gecos "" bot && \
     chown -R bot:bot /app && \
     chmod 755 /app
 
