@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 RUN gradle build --no-daemon
 
-FROM openjdk:17-alpine
+FROM openjdk:21-alpine
 WORKDIR /app
 COPY --from=builder /app/build/libs/yoodle-*-all.jar bot.jar
 
