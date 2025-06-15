@@ -1,25 +1,26 @@
 package org.britmoji.yoodle.extensions
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.publicSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.color
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalAttachment
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalEmoji
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
-import com.kotlindiscord.kord.extensions.utils.canInteract
-import com.kotlindiscord.kord.extensions.utils.download
-import com.kotlindiscord.kord.extensions.utils.getTopRole
-import com.kotlindiscord.kord.extensions.utils.selfMember
 import dev.kord.common.Color
 import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
-import dev.kord.core.entity.GuildEmoji
+import dev.kord.core.entity.CustomEmoji
 import dev.kord.core.entity.Member
 import dev.kord.core.entity.Role
 import dev.kord.core.entity.StandardEmoji
 import dev.kord.core.entity.User
 import dev.kord.rest.Image
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.publicSubCommand
+import dev.kordex.core.commands.converters.impl.color
+import dev.kordex.core.commands.converters.impl.optionalAttachment
+import dev.kordex.core.commands.converters.impl.optionalEmoji
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
+import dev.kordex.core.i18n.toKey
+import dev.kordex.core.utils.canInteract
+import dev.kordex.core.utils.download
+import dev.kordex.core.utils.getTopRole
+import dev.kordex.core.utils.selfMember
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
@@ -27,12 +28,12 @@ import kotlinx.coroutines.flow.toList
 class CustomizeExtension(override val name: String = "Customize") : Extension() {
     override suspend fun setup() {
         publicSlashCommand {
-            name = "customize"
-            description = "Change your color or icon"
+            name = "customize".toKey()
+            description = "Change your color or icon".toKey()
 
             publicSubCommand(::RoleArguments) {
-                name = "color"
-                description = "Change your color"
+                name = "color".toKey()
+                description = "Change your color".toKey()
 
                 action {
                     val role = getOrCreateRole(this.member!!.asMember(), arguments.color)
@@ -44,8 +45,8 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
             }
 
             publicSubCommand(::IconArguments) {
-                name = "icon"
-                description = "Change your icon"
+                name = "icon".toKey()
+                description = "Change your icon".toKey()
 
                 action {
                     val role = getOrCreateRole(this.member!!.asMember())
@@ -60,7 +61,7 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
                     when {
                         arguments.emoji != null -> when (val emoji = arguments.emoji!!) {
                             is StandardEmoji -> role.edit { this.unicodeEmoji = emoji.name }
-                            is GuildEmoji -> role.edit { this.icon = emoji.image.getImage() }
+                            is CustomEmoji -> role.edit { this.icon = emoji.image.getImage() }
                         }
 
                         arguments.image != null -> {
@@ -90,8 +91,8 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
             }
 
             publicSubCommand {
-                name = "remove"
-                description = "Remove your color and icon"
+                name = "remove".toKey()
+                description = "Remove your color and icon".toKey()
 
                 action {
                     val role = getOrCreateRole(this.member!!.asMember())
@@ -119,21 +120,21 @@ class CustomizeExtension(override val name: String = "Customize") : Extension() 
 
     private inner class RoleArguments : Arguments() {
         val color by color {
-            name = "color"
-            description = "The color to set"
+            name = "color".toKey()
+            description = "The color to set".toKey()
         }
     }
 
     private inner class IconArguments : Arguments() {
         val emoji by optionalEmoji {
-            name = "emoji"
-            description = "The emoji to set"
+            name = "emoji".toKey()
+            description = "The emoji to set".toKey()
             ignoreErrors = true
         }
 
         val image by optionalAttachment {
-            name = "image"
-            description = "The image to set"
+            name = "image".toKey()
+            description = "The image to set".toKey()
         }
     }
 
