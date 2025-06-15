@@ -1,13 +1,13 @@
 package org.britmoji.yoodle.extensions
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.utils.addReaction
-import com.kotlindiscord.kord.extensions.utils.getJumpUrl
 import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.entity.channel.GuildChannel
 import dev.kord.core.event.message.ReactionAddEvent
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import dev.kordex.core.utils.addReaction
+import dev.kordex.core.utils.getJumpUrl
 import org.britmoji.yoodle.util.cloneMessage
 
 class BookmarkExtension(override val name: String = "Bookmark") : Extension() {

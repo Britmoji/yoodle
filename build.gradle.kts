@@ -3,11 +3,12 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("jvm") version "2.1.21"
+    kotlin("plugin.serialization") version "2.1.21"
 
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.6"
+    id("com.gradleup.shadow") version "8.3.6"
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.10"
+    id("dev.kordex.gradle.kordex") version "1.6.1"
 }
 
 group = "org.britmoji"
@@ -27,38 +28,25 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-
-    // Kord
-    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.6-SNAPSHOT")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     // Logging
-    implementation("io.github.microutils:kotlin-logging:3.0.4")
-    implementation("org.apache.logging.log4j:log4j-api:2.19.0")
-    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0")
+    implementation("io.github.oshai:kotlin-logging:7.0.7")
+    implementation("org.apache.logging.log4j:log4j-api:2.24.3")
+    implementation("org.apache.logging.log4j:log4j-core:2.24.3")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3")
 
     // SVG -> PNG Conversion Feature
-    implementation("org.apache.xmlgraphics:batik-transcoder:1.16")
-    implementation("org.apache.xmlgraphics:batik-codec:1.16")
+    implementation("org.apache.xmlgraphics:batik-transcoder:1.19")
+    implementation("org.apache.xmlgraphics:batik-codec:1.19")
 }
 
-// Java build
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-}
-
-tasks.jar {
-    manifest.attributes(
-        "Main-Class" to main
-    )
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+kordEx {
+    bot {
+//        dataCollection(DataCollection.Standard)
+        mainClass = main
+    }
 }
 
 tasks["build"].dependsOn(tasks.shadowJar)

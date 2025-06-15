@@ -1,7 +1,7 @@
 package org.britmoji.yoodle
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import mu.KotlinLogging
+import dev.kordex.core.ExtensibleBot
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.britmoji.yoodle.config.config
 import org.britmoji.yoodle.extensions.BookmarkExtension
 import org.britmoji.yoodle.extensions.EventsExtension
@@ -29,7 +29,7 @@ suspend fun main() {
         }
 
         errorResponse { message, type ->
-            feedback(type.error.message ?: message) {
+            feedback(type.error.message ?: message.key) {
                 color = Colors.ERROR
             }
         }

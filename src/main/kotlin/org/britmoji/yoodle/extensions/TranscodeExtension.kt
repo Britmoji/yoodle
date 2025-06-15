@@ -1,12 +1,12 @@
 package org.britmoji.yoodle.extensions
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.request.forms.ChannelProvider
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
-import mu.KotlinLogging
 import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
 import org.apache.batik.transcoder.image.PNGTranscoder

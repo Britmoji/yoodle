@@ -2,9 +2,6 @@
 
 package org.britmoji.yoodle.util
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.utils.ensureWebhook
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.EmbedType
@@ -19,7 +16,11 @@ import dev.kord.core.live.onUpdate
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.WebhookMessageCreateBuilder
-import dev.kord.rest.builder.message.create.embed
+import dev.kord.rest.builder.message.embed
+import dev.kordex.core.DiscordRelayedException
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.i18n.toKey
+import dev.kordex.core.utils.ensureWebhook
 import io.ktor.client.request.forms.ChannelProvider
 import io.ktor.utils.io.jvm.javaio.toByteReadChannel
 import kotlinx.coroutines.CoroutineName
@@ -61,7 +62,7 @@ suspend fun MessageCreateBuilder.feedback(message: String? = null, builder: susp
 }
 
 @Suppress("UnusedReceiverParameter", "unused")
-fun CommandContext.error(message: String): Nothing = throw DiscordRelayedException(message)
+fun CommandContext.error(message: String): Nothing = throw DiscordRelayedException(message.toKey())
 
 /**
  * Logo as a byte array

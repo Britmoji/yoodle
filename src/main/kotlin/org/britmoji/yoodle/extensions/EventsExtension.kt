@@ -1,12 +1,12 @@
 package org.britmoji.yoodle.extensions
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.ChannelType
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import dev.kord.core.event.message.ReactionAddEvent
-import mu.KotlinLogging
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class EventsExtension(override val name: String = "Interaction") : Extension() {
 

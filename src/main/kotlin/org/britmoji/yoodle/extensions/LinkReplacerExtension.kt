@@ -1,11 +1,11 @@
 package org.britmoji.yoodle.extensions
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.utils.isNullOrBot
 import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import dev.kordex.core.utils.isNullOrBot
 import org.britmoji.yoodle.config.config
 import org.britmoji.yoodle.util.MessageTrigger
 import org.britmoji.yoodle.util.removeEmbeds
@@ -41,7 +41,7 @@ class LinkReplacerExtension(override val name: String = "Link Replacer") : Exten
 
                 // Create
                 event.message.removeEmbeds()
-                channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.url ?: it.avatar?.url }) {
+                channel.sendWebhook(event.member?.tag, event.member?.let { it.memberAvatar?.cdnUrl?.toUrl() ?: it.avatar?.cdnUrl?.toUrl() }) {
                     content = links.joinToString("\n")
                 }
             }
