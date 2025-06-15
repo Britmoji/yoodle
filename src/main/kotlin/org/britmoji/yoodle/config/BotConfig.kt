@@ -1,7 +1,6 @@
 package org.britmoji.yoodle.config
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -19,7 +18,7 @@ data class BotConfig(
     @Serializable
     data class Bot(
         val token: String = "INSERT_TOKEN_HERE",
-        val guildId: String = "INSERT_GUILD_ID_HERE",
+        val guildId: String? = null,
     )
 
     @Serializable

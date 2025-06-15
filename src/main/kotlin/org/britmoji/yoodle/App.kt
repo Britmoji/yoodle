@@ -4,6 +4,7 @@ import dev.kordex.core.ExtensibleBot
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.britmoji.yoodle.config.config
 import org.britmoji.yoodle.extensions.BookmarkExtension
+import org.britmoji.yoodle.extensions.CustomizeExtension
 import org.britmoji.yoodle.extensions.EventsExtension
 import org.britmoji.yoodle.extensions.GitHubExtension
 import org.britmoji.yoodle.extensions.LinkReplacerExtension
@@ -44,6 +45,7 @@ suspend fun main() {
             add(::LinkReplacerExtension)
             add(::TranscodeExtension)
             add(::BookmarkExtension)
+            add(::CustomizeExtension)
         }
     }
 
