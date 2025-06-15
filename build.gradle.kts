@@ -1,3 +1,4 @@
+import dev.kordex.gradle.plugins.kordex.DataCollection
 import org.jetbrains.gradle.ext.runConfigurations
 import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -44,7 +45,7 @@ dependencies {
 
 kordEx {
     bot {
-//        dataCollection(DataCollection.Standard)
+        dataCollection(DataCollection.None)
         mainClass = main
     }
 }
