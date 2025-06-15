@@ -8,6 +8,7 @@ import org.britmoji.yoodle.extensions.CustomizeExtension
 import org.britmoji.yoodle.extensions.EventsExtension
 import org.britmoji.yoodle.extensions.GitHubExtension
 import org.britmoji.yoodle.extensions.LinkReplacerExtension
+import org.britmoji.yoodle.extensions.OomfiesExtension
 import org.britmoji.yoodle.extensions.TranscodeExtension
 import org.britmoji.yoodle.util.Colors
 import org.britmoji.yoodle.util.feedback
@@ -46,6 +47,7 @@ suspend fun main() {
             add(::TranscodeExtension)
             add(::BookmarkExtension)
             add(::CustomizeExtension)
+            add(::OomfiesExtension)
         }
     }
 
