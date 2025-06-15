@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 RUN gradle build --no-daemon
 
-FROM openjdk:21-alpine
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=builder /app/build/libs/yoodle-*-all.jar bot.jar
 
